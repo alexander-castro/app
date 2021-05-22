@@ -1,7 +1,11 @@
-from flask import Flask, request, jsonify
-app = Flask(__name__)
+from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
+from random import randrange
 
-@app.route('/getmsg/', methods=['GET'])
+app = Flask(__name__)
+CORS(app)
+
+@app.route('/api/getmsg', methods=['GET'])
 def respond():
     name = request.args.get("name", None)
     print(f"got name {name}")
@@ -14,23 +18,11 @@ def respond():
         response["MESSAGE"] = f"Welcome {name} to our awesome platform!!"
     return jsonify(response)
 
-@app.route('/post/', methods=['POST'])
-def post_something():
-    param = request.form.get('name')
+@app.route('/api/patients', methods=['POST'])
+def postPatients():
+    param = request.data
     print(param)
-    if param:
-        return jsonify({
-            "Message": f"Welcome {name} to our awesome platform!!",
-            "METHOD" : "POST"
-        })
-    else:
-        return jsonify({
-            "ERROR": "no name found, please send a name."
-        })
-
-@app.route('/')
-def index():
-    return "<h1>Welcome to our server !!</h1>"
+    return jsonify({"Result": randrange(2)})
 
 if __name__ == '__main__':
     app.run(threaded=True, port=5000)
