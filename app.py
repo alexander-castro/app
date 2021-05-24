@@ -21,7 +21,7 @@ column_trans_1 = make_column_transformer((MinMaxScaler(), numeric_columns), rema
 column_trans_2 = make_column_transformer((OrdinalEncoder(dtype=np.int32), categorical_columns), remainder='passthrough')
 
 with app.app_context():
-    data = pd.read_csv(os.path.join(DIR, 'data\\framingham_heart_disease.csv'), sep=';')
+    data = pd.read_csv(os.path.join(DIR, 'data/framingham_heart_disease.csv'), sep=';')
     data = data.dropna()
     data = data.drop(data.columns[0], axis=1)
     data['BMI'] = data['BMI'].apply(lambda x: x.replace(',','.'))
@@ -47,13 +47,13 @@ with app.app_context():
                 ]
     pipe = Pipeline(estimators)
     clf = pipe.fit(X, y.values.ravel())
-    dump(clfN, os.path.join(DIR,'model\\clf.joblib'))
-    dump(clf, os.path.join(DIR,'model\\dataModel.joblib'))
+    dump(clfN, os.path.join(DIR,'model/clf.joblib'))
+    dump(clf, os.path.join(DIR,'model/dataModel.joblib'))
 
 @app.route('/api/patients', methods=['POST'])
 def postPatients():
-    model = load(os.path.join(DIR,'model\\dataModel.joblib'))
-    clf = load(os.path.join(DIR,'model\\clf.joblib'))
+    model = load(os.path.join(DIR,'model/dataModel.joblib'))
+    clf = load(os.path.join(DIR,'model/clf.joblib'))
     cols = ['male', 'age', 'education', 'currentSmoker', 'cigsPerDay',
        'prevalentStroke', 'prevalentHyp', 'diabetes', 'totChol', 'sysBP',
        'diaBP', 'BMI', 'heartRate', 'glucose']
